@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Display One Record</title>
+</head>
+<body>
+	<form method="post" action="display_food.php">
+		<label for="food-select">Select a Food Item:</label>
+		<select id="food-select" name="foodId">
+			<?php
+				// connect to database
+				$servername = "localhost";
+				$username = "root";
+				$password = "as3843";
+				$dbname = "students";
+				$conn = new mysqli($servername, $username, $password, $dbname);
+
+				// check connection
+				if ($conn->connect_error) {
+					die("Connection failed: " . $conn->connect_error);
+				}
+
+				// select all food items from table
+				$sql = "SELECT id, name FROM food";
+				$result = $conn->query($sql);
+
+				// generate dropdown menu options from query results
+				if ($result->num_rows > 0) {
+					while($row = $result->fetch_assoc()) {
+						echo '<option value="' . $row["id"] . '">' . $row["name"] . '</option>';
+					}
+				} else {
+					echo '<option value="">No food items found</option>';
+				}
+
+				// close database connection
+				$conn->close();
+			?>
+		</select>
+		<button type="submit">Display Food Item</button>
+	</form>
+</body>
+</html>
